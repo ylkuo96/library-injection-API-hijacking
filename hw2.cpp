@@ -314,7 +314,7 @@ extern "C" int dup2(int oldfd, int newfd){
 extern "C" int creat(const char *pathname, mode_t mode){
     int fd = libc_creat(pathname, mode);
     string target_path = getfilename(fd);
-    Print(stderr, "# creat(\"%s\", %o) = %d\n", target_path.c_str(), mode, fd);
+    Print(stderr, "# creat(\"%s\", 0%o) = %d\n", target_path.c_str(), mode, fd);
 
     return fd;    
 }

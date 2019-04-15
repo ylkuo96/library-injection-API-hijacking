@@ -1,7 +1,28 @@
-# fwrite(0x7ffe5a9e4178, 1, 7, "<STDOUT>") = 7
-# fscanf("<STDIN>", "%d", ...) = 1
-# fprintf("<STDOUT>", "Value [%d]
-", ...) = 10
+# creat("/home/yilin/Desktop/library-injection-API-hijacking/test1.txt", 644) = 3
+# chdir("./././") = 0
+# write("/home/yilin/Desktop/library-injection-API-hijacking/test1.txt", 0x7ffe89c60c40, 4) = 4
+# write("/home/yilin/Desktop/library-injection-API-hijacking/test1.txt", 0x7ffe89c60c40, 4) = 4
+# pwrite("/home/yilin/Desktop/library-injection-API-hijacking/test1.txt", 0x7ffe89c60c40, 4, 8192) = 4
+# close("/home/yilin/Desktop/library-injection-API-hijacking/test1.txt") = 0
+# open("/home/yilin/Desktop/library-injection-API-hijacking/test1.txt", 0x0) = 3
+# dup(3) = 4
+# dup(3, 1000) = 1000
+# read("/home/yilin/Desktop/library-injection-API-hijacking/test1.txt", 0x7ffe89c60c40, 16) = 16
+# close("/home/yilin/Desktop/library-injection-API-hijacking/test1.txt") = 0
+# stat("./test1.txt", 0x7ffe89c60c78 {mode=100644, size=8196}) = 0
+# chown("./test1.txt", 0, 0) = -1
+# chmod("./test1.txt", 0600) = 0
+# lstat("./test1.txt", 0x7ffe89c60c78 {mode=100600, size=8196}) = 0
+# rename("./test1.txt", "./test2.txt") = 0
+# link("./test2.txt", "./test1.txt") = 0
+# unlink("./test2.txt") = 0
+# symlink("./test1.txt", "./test2.txt") = 0
+# readlink("./test2.txt", 0x7ffe89c60c80, 16) = 11
+# mkdir("./dir1", 0777) = 0
+# lstat("./dir1", 0x7ffe89c60c78 {mode=40755, size=4096}) = 0
+# rmdir("./dir1") = 0
+# unlink("./test1.txt") = 0
+# remove("./test2.txt") = 0
 # fflush("<STDOUT>") = 0
 # fflush("<STDERR>") = 0
 # fflush("<STDERR>") = 0
