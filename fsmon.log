@@ -1,4 +1,4 @@
-# opendir("/home/yilin/Desktop/library-injection-API-hijacking") = 0x7ffd389f53f8
+# opendir("/home/yilin/Desktop/library-injection-API-hijacking") = 0x7fffdcce66d0
 # readdir("/home/yilin/Desktop/library-injection-API-hijacking") = testcases
 # readdir("/home/yilin/Desktop/library-injection-API-hijacking") = ..
 # readdir("/home/yilin/Desktop/library-injection-API-hijacking") = hw2.so
@@ -10,12 +10,12 @@
 # readdir("/home/yilin/Desktop/library-injection-API-hijacking") = hw2.cpp
 # readdir("/home/yilin/Desktop/library-injection-API-hijacking") = NULL
 # closedir("/home/yilin/Desktop/library-injection-API-hijacking") = 0
-# fwrite_unlocked(0x7ffd389f2fd8, 1, 9, "<STDOUT>") = 9
-# fwrite_unlocked(0x7ffd389f2fd8, 1, 7, "<STDOUT>") = 7
-# fwrite_unlocked(0x7ffd389f2fd8, 1, 6, "<STDOUT>") = 6
-# fwrite_unlocked(0x7ffd389f2fd8, 1, 8, "<STDOUT>") = 8
-# fwrite_unlocked(0x7ffd389f2fd8, 1, 9, "<STDOUT>") = 9
-# fwrite_unlocked(0x7ffd389f2fd8, 1, 9, "<STDOUT>") = 9
+# fwrite_unlocked(0x7fffdcce42a8, 1, 9, "<STDOUT>") = 9
+# fwrite_unlocked(0x7fffdcce42a8, 1, 7, "<STDOUT>") = 7
+# fwrite_unlocked(0x7fffdcce42a8, 1, 6, "<STDOUT>") = 6
+# fwrite_unlocked(0x7fffdcce42a8, 1, 8, "<STDOUT>") = 8
+# fwrite_unlocked(0x7fffdcce42a8, 1, 9, "<STDOUT>") = 9
+# fwrite_unlocked(0x7fffdcce42a8, 1, 9, "<STDOUT>") = 9
 # fflush("<STDOUT>") = 0
 # fclose("<STDOUT>") = 0
 # fflush("<STDERR>") = 0
