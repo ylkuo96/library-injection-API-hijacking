@@ -37,8 +37,8 @@ static int (*libc_creat) (const char *, mode_t) = NULL;
 static int (*libc_xstat) (int, const char *, struct stat *) = NULL;
 static int (*libc_lxstat) (int, const char *, struct stat *) = NULL;
 static ssize_t (*libc_pwrite) (int, const void *, size_t, off_t) = NULL;
-static FILE * (*libc_fopen) (const char *, const char *) = NULL;
-static int (*libc_fclose) (FILE *) = NULL;
+//static FILE * (*libc_fopen) (const char *, const char *) = NULL;
+//static int (*libc_fclose) (FILE *) = NULL;
 static size_t (*libc_fread) (void *, size_t, size_t, FILE *) = NULL;
 static size_t (*libc_fwrite) (const void *, size_t, size_t, FILE *) = NULL;
 static int (*libc_fgetc) (FILE *) = NULL;
@@ -63,7 +63,6 @@ static size_t (*libc_fwrite_unlocked) (const void *, size_t, size_t, FILE *) = N
 static int (*libc_fputs_unlocked) (const char *, FILE *) = NULL;
 static int (*libc_fflush) (FILE *) = NULL;
 static int (*libc_fflush_unlocked) (FILE *) = NULL;
-void *handle = NULL;
 
 __attribute__((constructor)) int start() {
     char *filename = getenv("MONITOR_OUTPUT");
@@ -71,7 +70,7 @@ __attribute__((constructor)) int start() {
         freopen(filename, "w", stderr);
     }
     
-    handle = dlopen("libc.so.6", RTLD_LAZY);
+    void *handle = dlopen("libc.so.6", RTLD_LAZY);
     if(handle == NULL){
         printf("error\n");
         return -1;
@@ -116,7 +115,7 @@ __attribute__((constructor)) int start() {
     if(libc_pwrite == NULL){
         libc_pwrite = (ssize_t (*) (int, const void *, size_t, off_t))dlsym(handle, "pwrite");
     }
-    
+    /*
     if(libc_fopen == NULL){
         libc_fopen = (FILE * (*) (const char *, const char *))dlsym(handle, "fopen");
     }
@@ -124,6 +123,7 @@ __attribute__((constructor)) int start() {
     if(libc_fclose == NULL){
         libc_fclose = (int (*) (FILE *))dlsym(handle, "fclose");
     }
+    */
     
     if(libc_fread == NULL){
         libc_fread = (size_t (*) (void *, size_t, size_t, FILE *))dlsym(handle, "fread");
@@ -230,9 +230,10 @@ void Print(FILE *stream, const char *format, ...){
     /*
      * to prevent when implementing fprintf then get into infinite loop
      */
+    void *H = dlopen("libc.so.6", RTLD_LAZY);
 	int (*P) (FILE *, const char *, ...) = NULL;	
-	if(handle != NULL && P == NULL){
-		P = (int (*) (FILE *, const char *, ...))dlsym(handle, "vfprintf");
+	if(H != NULL && P == NULL){
+		P = (int (*) (FILE *, const char *, ...))dlsym(H, "vfprintf");
 	}
 	
 	va_list ap;
@@ -241,6 +242,12 @@ void Print(FILE *stream, const char *format, ...){
 }
 
 string getfilename(int fd){
+    void *H = dlopen("libc.so.6", RTLD_LAZY);
+	ssize_t (*my_readlink) (const char *, char *, size_t) = NULL;	
+	if(H != NULL && my_readlink == NULL){
+		my_readlink = (ssize_t (*) (const char *, char *, size_t))dlsym(H, "readlink");
+	}
+
     if(fd == STDIN_FILENO){
         return "<STDIN>";
     }
@@ -254,7 +261,7 @@ string getfilename(int fd){
     string link_path = "/proc/self/fd/" + to_string(fd);
     char target_path[256];
     memset(target_path, 0, sizeof(target_path));
-    if(libc_readlink(link_path.c_str(), target_path, sizeof(target_path)) > 0){
+    if(my_readlink(link_path.c_str(), target_path, sizeof(target_path)) > 0){
         return (string)target_path;
     }
     else{ // -1 == error
@@ -346,6 +353,7 @@ extern "C" ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset){
 }
 
 FILE *fopen(const char *pathname, const char *mode){
+    /*
     // defined a pointer named `res` pointed to a structure `FILE` 
     FILE *res = libc_fopen(pathname, mode);
     // define a `FILE` structure named `f` and assigned `the value of` res
@@ -355,12 +363,37 @@ FILE *fopen(const char *pathname, const char *mode){
     Print(stderr, "# fopen(\"%s\", \"%s\") = %p\n", pathname, mode, res);
 
     return res;
+    */
+    void *H = dlopen("libc.so.6", RTLD_LAZY);
+    FILE * (*my_fopen) (const char *, const char *) = NULL;
+	if(H != NULL && my_fopen == NULL){
+        my_fopen = (FILE * (*) (const char *, const char *))dlsym(H, "fopen");
+    }
+
+    FILE *res = my_fopen(pathname, mode);
+    Print(stderr, "# fopen(\"%s\", \"%s\") = %p\n", pathname, mode, res);
+    return res;
 }
 
 extern "C" int fclose(FILE *stream){
+    /*
     int fd = stream->_fileno;
     string target_path = getfilename(fd);
     int res = libc_fclose(stream);
+    Print(stderr, "# fclose(\"%s\") = %d\n", target_path.c_str(), res);
+    
+    return res;
+    */
+    int fd = stream->_fileno;
+    string target_path = getfilename(fd);
+    
+    void *H = dlopen("libc.so.6", RTLD_LAZY);
+    int (*my_fclose) (FILE *) = NULL;
+	if(H != NULL && my_fclose == NULL){
+       my_fclose = (int (*) (FILE *))dlsym(H, "fclose");
+    }
+
+    int res = my_fclose(stream);
     Print(stderr, "# fclose(\"%s\") = %d\n", target_path.c_str(), res);
     
     return res;
