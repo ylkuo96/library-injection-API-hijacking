@@ -24,7 +24,6 @@ __attribute__((constructor)) int start() {
 }
 
 __attribute__((destructor)) void finish() {
-    //printf("bbb\n");
 }
 
 void Print(FILE *stream, const char *format, ...){
@@ -254,11 +253,17 @@ extern "C" int fclose(FILE *stream){
 	if(H != NULL && libc_fclose == NULL){
        libc_fclose = (int (*) (FILE *))dlsym(H, "fclose");
     }
-
-    int res = libc_fclose(stream);
-    Print(stderr, "# fclose(\"%s\") = %d\n", target_path.c_str(), res);
     
-    return res;
+    if(fd == STDERR_FILENO){
+        Print(stderr, "# fclose(\"%s\") = 0\n", target_path.c_str());
+        int res = libc_fclose(stream);
+        return res;
+    }
+    else{
+        int res = libc_fclose(stream);
+        Print(stderr, "# fclose(\"%s\") = %d\n", target_path.c_str(), res);
+        return res;
+    }
 }
 
 extern "C" size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream){
